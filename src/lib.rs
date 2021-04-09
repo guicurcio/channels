@@ -68,3 +68,14 @@ pub fn channel<T>() -> (Sender<T>, Receiver<T>) {
         },
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn first() {
+        let (mut tx, mut rx) = channel();
+        tx.send(42);
+        assert_eq!(rx.recv(), 42);
+    }
+}
