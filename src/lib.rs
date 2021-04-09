@@ -7,8 +7,18 @@ use std::{
 // around cyclically while removing elements from it.
 // Contrast this with using a vec where you need to resize and fill the holes of a removed object.
 
+// ARC: You can clone arc and there's still only one instance of the thing that's inside.
 pub struct Sender<T> {
     inner: Arc<Inner<T>>,
+}
+
+impl<T> Clone for Sender<T> {
+    fn clone(&self) -> Self {
+        Self {
+            // I only want to clone the Arc, and not what's inside Arc, which may happen if naively implementing clone for inner which may clone whatever inner is.
+            inner: Arc::clone(&self.inner),
+        }
+    }
 }
 
 impl<T> Sender<T> {
